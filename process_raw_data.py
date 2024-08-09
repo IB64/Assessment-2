@@ -1,24 +1,26 @@
 """A script to process book data."""
-import pandas as pd
 import re
 import sys
+
+import pandas as pd
 
 AUTHORS = pd.read_csv('data/AUTHORS.csv')
 
 def clean_title(title: str) -> str:
-    # Remove text inside brackets (and the brackets themselves)
+    """Remove text inside brackets (and the brackets themselves)"""
     cleaned_title = re.sub(r'\[.*?\]|\(.*?\)', '', title).strip()
     return cleaned_title
 
 def clean_rating(rating: str) -> str:
-    # Replace commas with dots in rating values (e.g., "4,16" -> "4.16")
+    """Replace commas with dots in rating values (e.g., "4,16" -> "4.16")"""
     return rating.replace(',', '.')
 
 def clean_ratings(ratings: str) -> str:
-    # Remove backticks from ratings values (e.g., `4501032` -> 4501032)
+    """Remove backticks from ratings values (e.g., `4501032` -> 4501032)"""
     return ratings.replace('`', '')
 
 def process_raw_data(file_path: str) -> None:
+    """Main function that processes the raw data and outputs a cleaned file."""
     try:
         # Load the data from the CSV file
         data = pd.read_csv(file_path)
@@ -57,12 +59,12 @@ def process_raw_data(file_path: str) -> None:
         data.rename(columns={'book_title': 'title',
                              'name': 'author_name',
                              'year released': 'year'}, inplace=True)
-        
+
         # Write the processed data to a new CSV file
         data.to_csv('PROCESSED_DATA.csv', index=False)
-        
+
         print("Data processing complete. PROCESSED_DATA.csv has been created.")
-        
+
     except Exception as e:
         print(f"An error occurred: {e}")
 
@@ -72,4 +74,3 @@ if __name__ == "__main__":
     else:
         file_path = sys.argv[1]
         process_raw_data(file_path)
-
