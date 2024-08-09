@@ -1,4 +1,5 @@
 """A script to process book data."""
+import os
 import re
 import sys
 
@@ -18,6 +19,10 @@ def clean_rating(rating: str) -> str:
 def clean_ratings(ratings: str) -> str:
     """Remove backticks from ratings values (e.g., `4501032` -> 4501032)"""
     return ratings.replace('`', '')
+
+def generate_file_path(file_name: str) -> str:
+    """Generates save filepath to data/ directory to fit all OS systems"""
+    return os.path.join("data", file_name)
 
 def process_raw_data(file_path: str) -> None:
     """Main function that processes the raw data and outputs a cleaned file."""
@@ -61,7 +66,7 @@ def process_raw_data(file_path: str) -> None:
                              'year released': 'year'}, inplace=True)
 
         # Write the processed data to a new CSV file
-        data.to_csv('PROCESSED_DATA.csv', index=False)
+        data.to_csv(generate_file_path('PROCESSED_DATA.csv'), index=False)
 
         print("Data processing complete. PROCESSED_DATA.csv has been created.")
 
